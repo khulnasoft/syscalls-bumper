@@ -1,0 +1,27 @@
+name: 'syscalls-bumper'
+description: 'Update supported syscalls in khulnasoft libs.'
+
+inputs:
+  repo-root:
+    description: Repo root path
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Setup Go
+      uses: actions/setup-go@v4
+      with:
+        go-version-file: "${{ github.action_path }}/go.mod"
+        
+    - name: Build tool
+      shell: bash
+      working-directory: ${{ github.action_path }}
+      run: |
+        make build
+
+    - name: Bump syscalls
+      shell: bash
+      working-directory: ${{ github.action_path }}
+      run: |
+        ./build/syscalls-bumper --repo-root ${{ inputs.repo-root }} --overwrite

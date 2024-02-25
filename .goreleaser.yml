@@ -1,0 +1,135 @@
+project_name: syscalls-bumper
+builds:
+  - id: "syscalls-bumper"
+    env:
+    - CGO_ENABLED=0
+    goos:
+    - linux
+    goarch:
+    - amd64
+    - arm64
+    - s390x
+    - riscv64
+    - ppc64le
+    main: .
+    flags:
+      - -v 
+    binary: syscalls-bumper
+
+dockers:
+  - use: buildx
+    goos: linux
+    goarch: amd64
+    dockerfile: Dockerfile
+    image_templates:
+      - "khulnasoft/syscalls-bumper:latest-amd64"
+      - "khulnasoft/syscalls-bumper:{{ .Version }}-amd64"
+    build_flag_templates:
+      - "--pull"
+      - "--label=org.opencontainers.image.created={{.Date}}"
+      - "--label=org.opencontainers.image.name={{.ProjectName}}"
+      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+      - "--label=org.opencontainers.image.version={{.Version}}"
+    extra_files:
+      - .git
+      - go.mod
+      - go.sum
+      - main.go
+      - Makefile
+  - use: buildx
+    goos: linux
+    goarch: arm64
+    dockerfile: Dockerfile
+    image_templates:
+      - "khulnasoft/syscalls-bumper:latest-arm64v8"
+      - "khulnasoft/syscalls-bumper:{{ .Version }}-arm64v8"
+    build_flag_templates:
+      - "--platform=linux/arm64/v8"
+      - "--pull"
+      - "--label=org.opencontainers.image.created={{.Date}}"
+      - "--label=org.opencontainers.image.name={{.ProjectName}}"
+      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+      - "--label=org.opencontainers.image.version={{.Version}}"
+    extra_files:
+      - .git
+      - go.mod
+      - go.sum
+      - main.go
+      - Makefile
+  - use: buildx
+    goos: linux
+    goarch: s390x
+    dockerfile: Dockerfile
+    image_templates:
+      - "khulnasoft/syscalls-bumper:latest-s390x"
+      - "khulnasoft/syscalls-bumper:{{ .Version }}-s390x"
+    build_flag_templates:
+      - "--pull"
+      - "--label=org.opencontainers.image.created={{.Date}}"
+      - "--label=org.opencontainers.image.name={{.ProjectName}}"
+      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+      - "--label=org.opencontainers.image.version={{.Version}}"
+    extra_files:
+      - .git
+      - go.mod
+      - go.sum
+      - main.go
+      - Makefile
+  - use: buildx
+    goos: linux
+    goarch: riscv64
+    dockerfile: Dockerfile
+    image_templates:
+      - "khulnasoft/syscalls-bumper:latest-riscv64"
+      - "khulnasoft/syscalls-bumper:{{ .Version }}-riscv64"
+    build_flag_templates:
+      - "--pull"
+      - "--label=org.opencontainers.image.created={{.Date}}"
+      - "--label=org.opencontainers.image.name={{.ProjectName}}"
+      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+      - "--label=org.opencontainers.image.version={{.Version}}"
+    extra_files:
+      - .git
+      - go.mod
+      - go.sum
+      - main.go
+      - Makefile
+  - use: buildx
+    goos: linux
+    goarch: ppc64le
+    dockerfile: Dockerfile
+    image_templates:
+      - "khulnasoft/syscalls-bumper:latest-ppc64le"
+      - "khulnasoft/syscalls-bumper:{{ .Version }}-ppc64le"
+    build_flag_templates:
+      - "--pull"
+      - "--label=org.opencontainers.image.created={{.Date}}"
+      - "--label=org.opencontainers.image.name={{.ProjectName}}"
+      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+      - "--label=org.opencontainers.image.version={{.Version}}"
+    extra_files:
+      - .git
+      - go.mod
+      - go.sum
+      - main.go
+      - Makefile  
+docker_manifests:
+  # https://goreleaser.com/customization/docker_manifest/
+  - name_template: khulnasoft/syscalls-bumper:{{ .Version }}
+    image_templates:
+      - khulnasoft/syscalls-bumper:{{ .Version }}-amd64
+      - khulnasoft/syscalls-bumper:{{ .Version }}-arm64v8
+      - khulnasoft/syscalls-bumper:{{ .Version }}-s390x
+      - khulnasoft/syscalls-bumper:{{ .Version }}-riscv64
+      - khulnasoft/syscalls-bumper:{{ .Version }}-ppc64le
+  - name_template: khulnasoft/syscalls-bumper:latest
+    image_templates:
+      - khulnasoft/syscalls-bumper:latest-amd64
+      - khulnasoft/syscalls-bumper:latest-arm64v8
+      - khulnasoft/syscalls-bumper:latest-s390x
+      - khulnasoft/syscalls-bumper:latest-riscv64
+      - khulnasoft/syscalls-bumper:latest-ppc64le
+
+release:
+  github:
+  prerelease: auto
